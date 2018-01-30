@@ -16,6 +16,7 @@ mongoose.connect("mongodb://localhost/passport-local");
 //require the user model
 const User = require("./models/user");
 const session       = require("express-session");
+const MongoStore = require('connect-mongo')(session)
 const bcrypt        = require("bcrypt");
 const passport      = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
@@ -37,14 +38,16 @@ const flash = require("connect-flash");
 
 
 // view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
+// app.set('views', path.join(__dirname, 'views'));
+// app.set('view engine', 'ejs'); duplicadas más abajo.
 
 //layouts
 app.use(expressLayouts);
 app.set('layout', 'layouts/layout');
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
+
+
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -63,13 +66,12 @@ app.use(session({
      mongooseConnection: mongoose.connection,
      ttl: 24 * 60 * 60
    })
- })));
+ }));
 
 // require in the routers
+app.use('/users', users);
+app.use('/passport', passportRouter);
 app.use('/', index);
-app.use('/', users);
-app.use('/', passportRouter);
-
 
 
 

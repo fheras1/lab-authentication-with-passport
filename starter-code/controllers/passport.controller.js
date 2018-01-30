@@ -8,7 +8,7 @@ module.exports.signup = (req, res, next) => {
 
     res.render('passport/signup',{ user: req.user });
   }
- }
+
 
  module.exports.doSignup = (req, res) => {
      User.findOne({ username: req.body.username })
@@ -19,7 +19,7 @@ module.exports.signup = (req, res, next) => {
                  user = new User(req.body);
                  user.save()
                      .then(() => {
-                         res.redirect('passport/login');
+                         res.redirect('/passport/login');
                      }).catch(error => {
                          if (error instanceof mongoose.Error.ValidationError) {
                              res.render('passport/signup', { user: user, error: error.errors })
@@ -32,11 +32,14 @@ module.exports.signup = (req, res, next) => {
  }
 
  module.exports.privatePage = (req, res, next) => {
-     
-       res.render('passport/private'{ user: req.user });
-     };
 
- }
+    res.render('passport/private', { user: req.user });
+  }
+
+  module.exports.login = (req, res, next) => {
+
+      res.render('passport/login',{ user: req.user });
+    }
 
  module.exports.doLogin = (req, res, next) => {
      const username = req.body.username;
